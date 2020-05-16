@@ -40,7 +40,7 @@ namespace Multiconsult_V001.Components
             pManager.AddPointParameter("Points", "P", "Points on the terrain", GH_ParamAccess.list);
             pManager.AddSurfaceParameter("Surface", "S", "Surface of the terrain", GH_ParamAccess.list);
             pManager.AddCurveParameter("Hull", "H", "Curve of the terrain", GH_ParamAccess.list);
-            pManager.AddNumberParameter("Angle", "ang", "The string  list with coordinates information", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Angle", "ang", "The string  list with coordinates information", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -101,17 +101,23 @@ namespace Multiconsult_V001.Components
                 crv.TryGetPolyline(out pl1);
                 var t = Transform.Rotation(a, new Point3d(0,0,0));
                 pl1.Transform(t);
+                var bbpl1 = new BoundingBox(pl1);
 
+                
+                var a1 = AreaMassProperties.Compute(pl1.ToNurbsCurve()).Area;
+                var a2 = bbpl1.Area;
 
-                //var a1 = AreaMassProperties.Compute(srf1).Area;
-                //var a2 = AreaMassProperties.Compute(srf2).Area;
+                double difA = Math.Abs(a1 - a2);
+                dicAngleArea.Add(a, difA);
 
-                //double difA = Math.Abs(a1 - a2);
-                //dicAngleArea.Add(a, difA);
                 pls.Add(pl1.ToNurbsCurve());
+                var lbbpl1 = bbpl1.GetCorners();
+                pls.Add(new Polyline(lbbpl1).ToNurbsCurve());
             }
-            
-            
+
+
+            //take the best rotation angle, which means the rotation to fit the bounding box the best
+            var keyAngle = dicAngleArea.OrderBy(kvp => kvp.Value).First().Key;
 
 
             //outputs
@@ -120,7 +126,7 @@ namespace Multiconsult_V001.Components
             DA.SetDataList(2, pts);
             DA.SetDataList(3, srfs);
             DA.SetDataList(4, pls);
-            DA.SetDataList(5, angles);
+            DA.SetData(5, keyAngle);
         }
 
         public List<Point3d> CreateListOfPoints(List<string> strs)
