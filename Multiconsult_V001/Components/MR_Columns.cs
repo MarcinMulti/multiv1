@@ -45,6 +45,7 @@ namespace Multiconsult_V001
         {
             pManager.AddGenericParameter("MultiColumn", "MC", "Mulitconsult column object", GH_ParamAccess.list);
             pManager.AddTextParameter("Informations","I","Informations about transition",GH_ParamAccess.list);
+            pManager.AddCurveParameter("Curves", "C", "Curves", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -58,9 +59,12 @@ namespace Multiconsult_V001
             List<Line> lines = new List<Line>();
             List<string> sects = new List<string>();
             List<string> mats = new List<string>();
+            List<Curve> crvsecs = new List<Curve>();
+
             DA.GetDataList(0, lines);
             DA.GetDataList(1, sects);
             DA.GetDataList(2, mats);
+            DA.GetDataList(3, crvsecs);
 
             //parameters
             List<Column> cols = new List<Column>();

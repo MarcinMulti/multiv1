@@ -58,12 +58,15 @@
   <ItemGroup>
     <Compile Include="Classes\Assembler.cs" />
     <Compile Include="Classes\Column.cs" />
+    <Compile Include="Classes\Column_Section.cs" />
     <Compile Include="Classes\Floor.cs" />
     <Compile Include="Classes\Geo_Borehole.cs" />
     <Compile Include="Classes\Geo_Layer.cs" />
     <Compile Include="Classes\Geo_Node.cs" />
     <Compile Include="Classes\Geo_Terrain.cs" />
+    <Compile Include="Classes\Material.cs" />
     <Compile Include="Classes\Wall.cs" />
+    <Compile Include="Components\MR_Column_Brep.cs" />
     <Compile Include="Components\MR_Walls.cs" />
     <Compile Include="Components\MR_Floors.cs" />
     <Compile Include="Components\MR_Assembler.cs" />

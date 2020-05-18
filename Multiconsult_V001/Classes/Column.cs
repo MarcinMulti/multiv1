@@ -15,8 +15,10 @@ namespace Multiconsult_V001.Classes
         public Point3d pt_end;
         public string name;
         public int id;
-        public string section;
-        public string material;
+
+        //Added Multiclasses
+        public Column_Section section;
+        public Material material;
 
         //constructors
         public Column(Line _line)
