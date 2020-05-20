@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Multiconsult_V001.Classes
 {
-    class Assembler
+    class Assembly
     {
         public Dictionary<int, Column> columns;
         public Dictionary<int, Floor> floors;
         public Dictionary<int, Wall> walls;
 
-        public Assembler()
+        public Assembly()
         { 
             //empty constructor
         }

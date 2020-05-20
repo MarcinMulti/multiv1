@@ -24,6 +24,11 @@ namespace Multiconsult_V001.Classes
         public string material;
 
         //constructors
+        public Column_Section( )
+        {
+         //empty constructor
+        }
+
         public Column_Section(string _name)
         {
             name = _name;

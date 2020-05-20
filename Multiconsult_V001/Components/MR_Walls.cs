@@ -71,11 +71,7 @@ namespace Multiconsult_V001.Components
                 infos.Add("The process of creating walls started");
                 for (int i = 0; i < nwls; i++)
                 {
-                    var wl = new Wall(-1, srfs[i]);
-                    wl.name = "flat floor";
-                    wl.section = sects[i];
-                    wl.material = mats[0];
-                    wls.Add(wl);
+
                 }
             }
 

@@ -8,15 +8,15 @@ using Rhino.Geometry;
 
 namespace Multiconsult_V001.Components
 {
-    public class MR_Assembler : GH_Component
+    public class MC_Assembler : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the MyComponent3 class.
         /// </summary>
-        public MR_Assembler()
+        public MC_Assembler()
           : base("Assembler", "AS",
-              "Description",
-              "Multiconsult", "Revit")
+              "Gather the elements of the model ",
+              "Multiconsult", "Model")
         {
         }
 
@@ -83,7 +83,7 @@ namespace Multiconsult_V001.Components
             }
 
             //assign dictionaries to assembly
-            Assembler assembly = new Assembler();
+            Assembly assembly = new Assembly();
             assembly.columns = dcols;
             assembly.floors = dfls;
             assembly.walls = dwls;

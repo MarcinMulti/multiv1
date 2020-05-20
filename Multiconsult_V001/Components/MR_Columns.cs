@@ -88,8 +88,6 @@ namespace Multiconsult_V001
                     
                     var col = new Column(-1,lines[i]);
                     col.name = "straight column";
-                    col.section = sects[i];
-                    col.material = mats[0];
                     cols.Add(col);
                     
                     //infos.Add("column number=" + i + " type=" + col.name);

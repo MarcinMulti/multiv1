@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using Multiconsult_V001.Classes;
-using Grasshopper.Kernel;
-using Rhino.Geometry;
 using System.Linq;
+
+using Grasshopper.Kernel;
+using Multiconsult_V001.Classes;
+using Rhino.Geometry;
 
 namespace Multiconsult_V001.Components
 {
-    public class MR_Column_Brep : GH_Component
+    public class MR_Floor_Brep : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the MR_Column_Brep class.
+        /// Initializes a new instance of the MR_Floor_Brep class.
         /// </summary>
-        public MR_Column_Brep()
-          : base("ColumnFromBrep", "COB",
-              "Coulmn from brep",
+        public MR_Floor_Brep()
+          : base("FloorBrep", "FLb",
+              "Make a multiconsult floor from brep",
               "Multiconsult", "Revit")
         {
         }
@@ -25,7 +26,7 @@ namespace Multiconsult_V001.Components
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddBrepParameter("Brep", "BC", "Brep which have to be change to column", GH_ParamAccess.item);
-            pManager.AddTextParameter("RevitMaterials", "RM", "Revit element materials", GH_ParamAccess.item, "Revit Material : Betong - B35");
+            pManager.AddTextParameter("RevitMaterials", "RM", "Revit element materials", GH_ParamAccess.item,"Revit Material : Betong - B35");
         }
 
         /// <summary>
@@ -33,8 +34,12 @@ namespace Multiconsult_V001.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("MultiColumn", "MC", "Mulitconsult column object", GH_ParamAccess.item);
+            pManager.AddGenericParameter("MultiFloor", "MF", "Mulitconsult floor object", GH_ParamAccess.item);
             pManager.AddTextParameter("Informations", "I", "Informations about transition", GH_ParamAccess.list);
+            pManager.AddBrepParameter("Surface", "S", "MasterSurface", GH_ParamAccess.list);
+            pManager.AddCurveParameter("Boundaries", "b", "Curves boundaries", GH_ParamAccess.list);
+            pManager.AddCurveParameter("InternalBoundaries", "ib", "Curves boundaries", GH_ParamAccess.list);
+            pManager.AddCurveParameter("ExternalBoundaries", "eb", "Curves boundaries", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -58,14 +63,11 @@ namespace Multiconsult_V001.Components
             infos.Add(" Create Mulitconsult column class ");
             var cpts = Methods.Geometry.findBottomAndTopCenterPoints(brep);
             //create Multiconsult columne object
-            Column c = new Column(new Line(cpts[0],cpts[1]) );
-            
+            Floor f = new Floor();
+
             //assign section to column
-            c.section = Methods.Geometry.findColumnSection(brep);
-            c.name = "column FromBrep";
-            c.pt_end = cpts[1];
-            c.pt_st = cpts[0];
-            
+            f.section = Methods.Geometry.findFloorSection(brep);
+
             //get materials from revit string
             string[] RevitMats = type.Split(':');
             Material m = new Material();
@@ -74,14 +76,35 @@ namespace Multiconsult_V001.Components
             m.name = matName[1].Trim();
 
             //assign material to column
-            c.material = m;
+            f.material = m;
+            f.brep = brep;
+
+            //code for finding basic geometry
+            List<Curve> ibcrvs = new List<Curve>(); //internal boundaries
+
+            //find central plane
+            f.plane = new Plane(new Line(cpts[0], cpts[1]).PointAt(0.5), new Vector3d(0, 0, 1)); //XY plane in the middle of the floor height
+            
+            //intersect the brep with the plane to find master surface and boundaries
+            Curve[] icrvs;
+            Point3d[] ipts;
+            var didItSect = Rhino.Geometry.Intersect.Intersection.BrepPlane(brep, f.plane, 0.00001, out icrvs, out ipts );
+            ibcrvs = icrvs.ToList();
+            ibcrvs.RemoveAt(0);
+            f.boundaryExternal = icrvs[0];
+            f.boundaryInternal = ibcrvs.ToArray();
+            f.nodes = ipts;
+            
+            var b = Brep.CreatePlanarBreps(icrvs, 0.000001);
+            f.surface = b;
 
             //validate the information about analysis
-            infos.Add("Revit Material= " + m.RevitMaterialName);
-            infos.Add("Section = " + c.section.name);
+            infos.Add("Section appears? = " + didItSect);
+            infos.Add("Revit Material= " + m.RevitMaterialName + " MultiMaterial name= " + m.name);
+            infos.Add("Section = " + f.section.name + " with thickness= " + f.section.width);
 
             //outputs
-            DA.SetData(0, c);
+            DA.SetData(0, f);
             DA.SetDataList(1, infos);
         }
 
@@ -103,7 +126,7 @@ namespace Multiconsult_V001.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("a30ab3bd-46b1-4cc6-843e-87ce79ab2519"); }
+            get { return new Guid("a6bdfaf0-bc39-4419-8365-394e664a3d05"); }
         }
     }
 }

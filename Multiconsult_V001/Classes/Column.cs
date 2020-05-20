@@ -15,6 +15,7 @@ namespace Multiconsult_V001.Classes
         public Point3d pt_end;
         public string name;
         public int id;
+        public Brep brep;
 
         //Added Multiclasses
         public Column_Section section;

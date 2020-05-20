@@ -10,23 +10,28 @@ namespace Multiconsult_V001.Classes
     class Floor
     {
         //properties
-        public Surface surface;
+        public Brep[] surface;
         public Point3d[] nodes;
         public Curve boundaryExternal;
         public Curve[] boundaryInternal;
         public Plane plane;
         public string name;
         public int id;
-        public string section;
-        public string material;
+        public Floor_Section section;
+        public Material material;
+        public Brep brep;
 
         //constructors
-        public Floor(Surface _surface)
+        public Floor()
+        {
+            //empty constructor
+        }
+        public Floor(Brep[] _surface)
         {
             surface = _surface;
         }
 
-        public Floor(int _id, Surface _surface)
+        public Floor(int _id, Brep[] _surface)
         {
             id = _id;
             surface = _surface;

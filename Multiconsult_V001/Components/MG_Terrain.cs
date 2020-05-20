@@ -64,7 +64,7 @@ namespace Multiconsult_V001.Components
             var terrain = new Geo_Terrain(pts);
 
             //project point on XY plane
-            var fpts = Plaxis.ProjectPointsOnXY(pts);
+            var fpts = Methods.Plaxis.ProjectPointsOnXY(pts);
 
             var ghfpts = new List<GH_Point>();
             foreach (var fp in fpts)

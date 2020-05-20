@@ -3,19 +3,18 @@ using System.Collections.Generic;
 
 using Grasshopper.Kernel;
 using Rhino.Geometry;
-using Multiconsult_V001.Classes;
 
 namespace Multiconsult_V001.Components
 {
-    public class MR_Floors : GH_Component
+    public class MC_CorrectModel_1 : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the MyComponent2 class.
+        /// Initializes a new instance of the CorrectModel_1 class.
         /// </summary>
-        public MR_Floors()
-          : base("Floor", "FL",
+        public MC_CorrectModel_1()
+          : base("CorrectModel_1", "Nickname",
               "Description",
-              "Multiconsult", "Revit")
+              "Category", "Subcategory")
         {
         }
 
@@ -24,9 +23,6 @@ namespace Multiconsult_V001.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddSurfaceParameter("Surface", "S", "Surface of the floor", GH_ParamAccess.list);
-            pManager.AddTextParameter("Section", "S", "Section of the column", GH_ParamAccess.list);
-            pManager.AddTextParameter("Material", "M", "Material of the column", GH_ParamAccess.list, new List<string>() { "C20/25" });
         }
 
         /// <summary>
@@ -34,8 +30,6 @@ namespace Multiconsult_V001.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Multifloor", "MF", "Mulitconsult floor object", GH_ParamAccess.list);
-            pManager.AddTextParameter("Informations", "I", "Informations about transition", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -44,26 +38,6 @@ namespace Multiconsult_V001.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            //inputs
-            List<Surface> srfs = new List<Surface>();
-            List<string> sects = new List<string>();
-            List<string> mats = new List<string>();
-            DA.GetDataList(0, srfs);
-            DA.GetDataList(1, sects);
-            DA.GetDataList(2, mats);
-
-            //parameters
-            List<Floor> fls = new List<Floor>();
-            List<string> infos = new List<string>();
-
-            int nfls = srfs.Count;
-            int nsects = sects.Count;
-
-            infos.Add("Component under construction, do not use till finished ;)");
-
-
-            DA.SetDataList(0, fls);
-            DA.SetDataList(1, infos);
         }
 
         /// <summary>
@@ -84,7 +58,7 @@ namespace Multiconsult_V001.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("fa5c526a-57f9-4e4e-9a0f-34ad3f67cbbb"); }
+            get { return new Guid("9c5ba895-a13c-446c-84c0-3759f6251568"); }
         }
     }
 }
