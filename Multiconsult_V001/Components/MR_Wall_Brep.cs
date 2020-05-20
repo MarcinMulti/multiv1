@@ -80,8 +80,10 @@ namespace Multiconsult_V001.Components
             w.constructionLines = constructionLines;
 
             Line heightLine = new Line(cpts[0],cpts[1]);
-            
-            w.bottomAxis = constructionLines[0].ToNurbsCurve();
+            NurbsCurve bottomAxisCurve = constructionLines[0].ToNurbsCurve();
+            var projectToBottom = Transform.PlanarProjection(w.planeBottom);
+            bottomAxisCurve.Transform(projectToBottom);
+            w.bottomAxis = bottomAxisCurve;
             Point3d wallOrigin = constructionLines[2].PointAt(0.5);
             Vector3d wallX = Point3d.Subtract(constructionLines[0].From, constructionLines[0].To);
             Vector3d wallY = Point3d.Subtract(constructionLines[2].From, constructionLines[2].To);
@@ -92,7 +94,7 @@ namespace Multiconsult_V001.Components
             //assign material
             w.material = Methods.Revit.getRevitMaterialFromString(type);
 
-            Brep masterSurface = Brep.CreateFromSweep(w.constructionLines[2].ToNurbsCurve(), w.constructionLines[0].ToNurbsCurve(), true, 0.000001)[0];
+            Brep masterSurface = Brep.CreateFromSweep(w.constructionLines[2].ToNurbsCurve(), w.bottomAxis, true, 0.000001)[0];
             w.surface = masterSurface;
 
             //validate the information about analysis

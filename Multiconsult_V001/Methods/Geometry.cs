@@ -241,9 +241,11 @@ namespace Multiconsult_V001.Methods
             var moveToMiddleY = Transform.Translation((Point3d.Subtract(midleLine.PointAt(0.5), longest.PointAt(0.5))));
             longest.Transform(moveToMiddleY);
 
-            Line hLine = new Line(cpts[0],cpts[1]);
-            var moveToCenter = Transform.Translation((Point3d.Subtract(hLine.PointAt(0.5), longest.PointAt(0.5))));
-            hLine.Transform(moveToCenter);
+            Line hLine = new Line(
+                new Point3d(midleLine.PointAt(0.5).X, midleLine.PointAt(0.5).Y, cpts[0].Z),
+                new Point3d(midleLine.PointAt(0.5).X, midleLine.PointAt(0.5).Y, cpts[1].Z)
+                );
+            
 
             lines[0] = longest;
             lines[1] = midleLine;
