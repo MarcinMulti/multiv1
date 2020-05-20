@@ -29,7 +29,9 @@ namespace Multiconsult_V001.Plaxis
         /// Registers all the output parameters for this component.
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
-        {pManager.AddGenericParameter("PlaxisModel", "MA", "Multiconsult assembly", GH_ParamAccess.item);
+        {
+            
+           pManager.AddGenericParameter("PlaxisModel", "MA", "Multiconsult assembly", GH_ParamAccess.item);
         }
 
         /// <summary>
