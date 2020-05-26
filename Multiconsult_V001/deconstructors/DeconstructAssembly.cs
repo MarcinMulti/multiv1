@@ -33,6 +33,9 @@ namespace Multiconsult_V001.deconstructors
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddBrepParameter("AllBreps", "MBs", "All REvitBreps in the model", GH_ParamAccess.list);
+            pManager.AddGenericParameter("MultiColumns", "MC", "Multiconsult assembly", GH_ParamAccess.list);
+            pManager.AddGenericParameter("MultiWalls", "MW", "Multiconsult assembly", GH_ParamAccess.list);
+            pManager.AddGenericParameter("MultiFloors", "MF", "Multiconsult assembly", GH_ParamAccess.list);
             pManager.AddLineParameter("LineColumns", "LC", "All column lines", GH_ParamAccess.list);
             pManager.AddBrepParameter("SurfaceWalls", "SW", "All surface walls", GH_ParamAccess.list);
             pManager.AddBrepParameter("SurfaceFloors", "SF", "All surface floors", GH_ParamAccess.list);
@@ -72,9 +75,12 @@ namespace Multiconsult_V001.deconstructors
             }
 
             DA.SetDataList(0, bs);
-            DA.SetDataList(1, ls);
-            DA.SetDataList(2, ws);
-            DA.SetDataList(3, fs);
+            DA.SetDataList(1, model.columns.Values);
+            DA.SetDataList(2, model.walls.Values);
+            DA.SetDataList(3, model.floors.Values);
+            DA.SetDataList(4, ls);
+            DA.SetDataList(5, ws);
+            DA.SetDataList(6, fs);
         }
 
         /// <summary>

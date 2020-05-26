@@ -54,7 +54,7 @@ namespace Multiconsult_V001.deconstructors
             DA.SetData(2, w.plane); //2
             DA.SetData(3, w.planeBottom); //3
             DA.SetData(4, w.planeTop); //4
-            DA.SetDataList(5, w.constructionLines.ToList() ); //4
+            DA.SetDataList(5, w.constructionLines.ToList()); //5
         }
 
         /// <summary>

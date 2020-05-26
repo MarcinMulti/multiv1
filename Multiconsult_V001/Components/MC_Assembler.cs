@@ -36,9 +36,9 @@ namespace Multiconsult_V001.Components
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddGenericParameter("MultiAssembler", "MA", "Mulitconsult assembled model object", GH_ParamAccess.item);
-            pManager.AddGenericParameter("MultiColumn", "MC", "Mulitconsult column object", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Multifloor", "MF", "Mulitconsult floor object", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Multiwall", "MW", "Mulitconsult wall object", GH_ParamAccess.list);
+            //pManager.AddGenericParameter("MultiColumn", "MC", "Mulitconsult column object", GH_ParamAccess.list);
+            //pManager.AddGenericParameter("Multifloor", "MF", "Mulitconsult floor object", GH_ParamAccess.list);
+            //pManager.AddGenericParameter("Multiwall", "MW", "Mulitconsult wall object", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -90,9 +90,9 @@ namespace Multiconsult_V001.Components
 
             //outputs
             DA.SetData(0, assembly);
-            DA.SetDataList(1, dcols.ToList());
-            DA.SetDataList(2, dfls.ToList());
-            DA.SetDataList(3, dwls.ToList());
+            //DA.SetDataList(1, dcols.ToList());
+            //DA.SetDataList(2, dfls.ToList());
+            //DA.SetDataList(3, dwls.ToList());
 
         }
 
