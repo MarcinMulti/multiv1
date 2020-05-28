@@ -12,9 +12,9 @@ namespace Multiconsult_V001.FEMDesign
         /// Initializes a new instance of the MF_FEMDesignModel class.
         /// </summary>
         public MF_FEMDesignModel()
-          : base("MF_FEMDesignModel", "Nickname",
-              "Description",
-              "Category", "Subcategory")
+          : base("DeconstructAssembly", "DA",
+              "Deconstruct assembly properties",
+              "Multiconsult", "FEMDesign")
         {
 
         }

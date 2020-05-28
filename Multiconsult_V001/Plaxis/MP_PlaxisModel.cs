@@ -12,9 +12,9 @@ namespace Multiconsult_V001.Plaxis
         /// Initializes a new instance of the MP_PlaxisModel class.
         /// </summary>
         public MP_PlaxisModel()
-          : base("MP_PlaxisModel", "Nickname",
-              "Description",
-              "Category", "Subcategory")
+          : base("DeconstructAssembly", "DA",
+              "Deconstruct assembly properties",
+              "Multiconsult", "Plaxis")
         {        }
 
         /// <summary>

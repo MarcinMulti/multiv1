@@ -31,6 +31,8 @@ namespace Multiconsult_V001.Components
             pManager.AddBooleanParameter("adjustWalls", "AW", "Adjust walls on the intersction with the floor plane", GH_ParamAccess.item, true);
             pManager.AddNumberParameter("Tolerances", "Ts", "Tolerances to adjust walls", GH_ParamAccess.list, new List<double>() { 500, 10, 400 });
             pManager.AddBooleanParameter("adjustFloors", "AF", "Adjust floors to walls", GH_ParamAccess.item, true);
+            pManager.AddNumberParameter("Tolerances", "Ts", "Tolerances to adjust floors", GH_ParamAccess.list, new List<double>() { 500 });
+            pManager.AddBooleanParameter("OnlyVerticalColumns", "VC", "Make columns perfectly straight", GH_ParamAccess.item, true);
         }
 
         /// <summary>
@@ -55,6 +57,8 @@ namespace Multiconsult_V001.Components
             bool adjustWalls = true;
             List<double> tols = new List<double>();
             bool adjustFloors = true;
+            List<double> tolsf = new List<double>();
+            bool verticalColumns = true;
 
             DA.GetData(0, ref model);
             DA.GetData(1, ref splitColumns);
@@ -62,6 +66,8 @@ namespace Multiconsult_V001.Components
             DA.GetData(3, ref splitWalls);
             DA.GetDataList(4, tols);
             DA.GetData(5, ref adjustFloors);
+            DA.GetDataList(6, tolsf);
+            DA.GetData(7, ref verticalColumns);
 
             Assembly newmodel = new Assembly();
 
@@ -92,12 +98,37 @@ namespace Multiconsult_V001.Components
 
             if (adjustFloors)
             {
-                
-            }
-            
+                Dictionary<int, Floor> nfs = new Dictionary<int, Floor>();
+                int iif = 0;
 
-            //output
-            DA.SetData(0, newmodel);
+                foreach (var f in flos.Values)
+                { 
+                    Floor nfB = Multiconsult_V001.Methods.Geometry.adjustFloorToBottomWalls(f, newmodel.walls, tolsf[0]);
+                    Floor nfT = Multiconsult_V001.Methods.Geometry.adjustFloorToTopWalls(nfB, newmodel.walls, tolsf[0]);
+
+                    Floor cF = Multiconsult_V001.Methods.Geometry.correctHolesInTheFloor(nfT);
+                    nfs.Add(iif++, cF);
+                }
+
+                newmodel.floors = nfs;
+            }
+
+            if (verticalColumns)
+            {
+                foreach (var c in newmodel.columns.Values)
+                {
+                    Line axis = c.line;
+                    var pt1 = new Point3d(axis.FromX, axis.FromY, axis.FromZ);
+                    var pt2 = new Point3d(axis.FromX, axis.FromY, axis.ToZ);
+
+                    //
+                    c.line = new Line(pt1, pt2);
+                    c.pt_end = pt2;
+                    c.pt_st = pt1;
+                }
+            }
+                //output
+                DA.SetData(0, newmodel);
             DA.SetDataList(1, model.walls.Values.ToList() );
         }
 

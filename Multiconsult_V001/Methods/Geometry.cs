@@ -651,6 +651,305 @@ namespace Multiconsult_V001.Methods
         }
         //end of method adjust the walls
 
+        public static Floor adjustFloorToBottomWalls(Floor floor, Dictionary<int, Wall> walls, double tolerance)
+        {
+            Floor newFloor = new Floor();
+            //z coordinate of the plane
+            double zc = Math.Round(floor.plane.OriginZ,5);
+
+            List<Line> bLs = new List<Line>();
+            List<Line> tLs = new List<Line>();
+            List<Point3d> bPs = new List<Point3d>();
+            List<Point3d> tPs = new List<Point3d>();
+            //create a list of wall lines, top and bottom ones, which are touching floor
+            foreach (var w in walls.Values)
+            {
+                double bz = Math.Round(w.bottomAxis.PointAtEnd.Z,5) ;
+
+                if (bz == zc)
+                {
+                    //create new line and add it bottom lines
+                    bLs.Add(new Line(w.bottomAxis.PointAtStart, w.bottomAxis.PointAtEnd));
+                    bPs.Add(w.bottomAxis.PointAtStart);
+                    bPs.Add(w.bottomAxis.PointAtEnd);
+                }
+            }
+            //clean point lists from duplicates
+
+            if (bPs.Count > 0)
+            {
+                var bpts = Point3d.CullDuplicates(bPs, 0.0001).ToList();
+                //var tpts = Point3d.CullDuplicates(tPs, tolerance).ToList();
+
+                //create polyline from external boundary of floor
+                Polyline pl = new Polyline();
+                floor.boundaryExternal.TryGetPolyline(out pl);
+
+                //correct external polyline
+                var moved = moveBoundaryToInLines(pl, bLs, tolerance);
+                var corrected = correctLinesAndCreatePolyline(moved, tolerance);
+                var adjusted = adjustPolylineToPoints(corrected, bpts, tolerance);
+
+                newFloor.name = floor.name;
+                newFloor.material = floor.material;
+                newFloor.boundaryExternal = adjusted.ToNurbsCurve();
+
+                //correct internal polyline
+                List<Curve> pls = new List<Curve>();
+                foreach (var ib in floor.boundaryInternal)
+                {
+                    Polyline pli = new Polyline();
+                    ib.TryGetPolyline(out pli);
+                    var movedi = moveBoundaryToInLines(pli, bLs, tolerance);
+                    var correctedi = correctLinesAndCreatePolyline(movedi, tolerance);
+                    var adjustedi = adjustPolylineToPoints(correctedi, bpts, tolerance);
+
+                    pls.Add(adjustedi.ToNurbsCurve());
+                }
+
+                newFloor.boundaryInternal = pls.ToArray();
+                
+                List<Curve> allCurves = new List<Curve>();
+                allCurves.Add(newFloor.boundaryExternal);
+                allCurves.AddRange(newFloor.boundaryInternal);
+                newFloor.surface = Brep.CreatePlanarBreps(allCurves, 0.0001);
+            }
+            else
+            {
+                newFloor = floor;
+            }
+
+            return newFloor;
+        }
+
+
+        public static Floor adjustFloorToTopWalls(Floor floor, Dictionary<int, Wall> walls, double tolerance)
+        {
+            Floor newFloor = new Floor();
+            //z coordinate of the plane
+            double zc = Math.Round(floor.plane.OriginZ, 5);
+
+            List<Line> bLs = new List<Line>();
+            List<Line> tLs = new List<Line>();
+            List<Point3d> bPs = new List<Point3d>();
+            List<Point3d> tPs = new List<Point3d>();
+            //create a list of wall lines, top and bottom ones, which are touching floor
+            foreach (var w in walls.Values)
+            {
+                double bz = Math.Round(w.topAxis.PointAtEnd.Z, 5);
+
+                if (bz == zc)
+                {
+                    //create new line and add it bottom lines
+                    bLs.Add(new Line(w.topAxis.PointAtStart, w.topAxis.PointAtEnd));
+                    bPs.Add(w.topAxis.PointAtStart);
+                    bPs.Add(w.topAxis.PointAtEnd);
+                }
+            }
+            //clean point lists from duplicates
+
+            if (bPs.Count > 0)
+            {
+                var bpts = Point3d.CullDuplicates(bPs, 0.0001).ToList();
+                //var tpts = Point3d.CullDuplicates(tPs, tolerance).ToList();
+
+                //create polyline from external boundary of floor
+                Polyline pl = new Polyline();
+                floor.boundaryExternal.TryGetPolyline(out pl);
+
+                //correct external polyline
+                var moved = moveBoundaryToInLines(pl, bLs, tolerance);
+                var corrected = correctLinesAndCreatePolyline(moved, tolerance);
+                var adjusted = adjustPolylineToPoints(corrected, bpts, tolerance);
+
+                newFloor.name = floor.name;
+                newFloor.material = floor.material;
+                newFloor.boundaryExternal = adjusted.ToNurbsCurve();
+
+                //correct internal polyline
+                List<Curve> pls = new List<Curve>();
+                foreach (var ib in floor.boundaryInternal)
+                {
+                    Polyline pli = new Polyline();
+                    ib.TryGetPolyline(out pli);
+                    var movedi = moveBoundaryToInLines(pli, bLs, tolerance);
+                    var correctedi = correctLinesAndCreatePolyline(movedi, tolerance);
+                    var adjustedi = adjustPolylineToPoints(correctedi, bpts, tolerance);
+
+                    pls.Add(adjustedi.ToNurbsCurve());
+                }
+
+                newFloor.boundaryInternal = pls.ToArray();
+
+                List<Curve> allCurves = new List<Curve>();
+                allCurves.Add(newFloor.boundaryExternal);
+                allCurves.AddRange(newFloor.boundaryInternal);
+                newFloor.surface = Brep.CreatePlanarBreps(allCurves, 0.0001);
+            }
+            else
+            {
+                newFloor = floor;
+            }
+
+            return newFloor;
+        }
+
+
+        //correct lines
+        public static Polyline correctLinesAndCreatePolyline(List<Line> lines, double tolerance)
+        {
+            int numOfLs = lines.Count;
+            //the first and last line
+            Line firstLine = lines[0];
+            Line lastLine = lines[numOfLs - 1];
+
+            double pa;
+            double pb;
+
+            Rhino.Geometry.Intersect.Intersection.LineLine(lastLine, firstLine, out pa, out pb, tolerance, false);
+
+            Point3d start = lastLine.PointAt(pa);
+
+            List<Point3d> ipts = new List<Point3d>();
+            ipts.Add(start);
+
+            for (int i = 0; i < numOfLs - 1; i++)
+            {
+                Line tempL = lines[i];
+                Line nextL = lines[i + 1];
+
+                double pt;
+                double pn;
+
+                Rhino.Geometry.Intersect.Intersection.LineLine(tempL, nextL, out pt, out pn, tolerance, false);
+
+                ipts.Add(tempL.PointAt(pt));
+            }
+
+            ipts.Add(start);
+
+            Polyline pl = new Polyline(ipts);
+            return pl;
+        }
+
+        //move lines to boundaries
+        public static List<Line> moveBoundaryToInLines(Polyline plfl, List<Line> lines, double tolerance)
+        {
+            List<Line> movedLines = new List<Line>();
+            for (int i = 0; i < plfl.Count - 1; i++)
+            {
+                //
+                var sP = plfl[i];
+                var eP = plfl[i + 1];
+                Line segment = new Line(sP, eP);
+                //
+                Vector3d segVec = segment.Direction;
+
+                Line mL = segment;
+                foreach (Line sW in lines)
+                {
+                    Vector3d wallVec = sW.Direction;
+
+                    if (segVec.IsParallelTo(wallVec, 0.05) == 1 || segVec.IsParallelTo(wallVec, 0.05) == -1) //approximately 3.6 deg of angle difference is allowed
+                    {
+                        double mindist = segment.MinimumDistanceTo(sW);
+                        if (mindist < tolerance)
+                        {
+                            mL = sW;
+                        }
+                    }
+                }
+                movedLines.Add(mL);
+            }
+            return movedLines;
+        }
+
+
+        //adjust polyline vertices to set of points
+        public static Polyline adjustPolylineToPoints(Polyline plfl, List<Point3d> allPts, double tolerance)
+        {
+            //
+            Polyline npl = new Polyline();
+
+            for (int i = 0; i < plfl.Count; i++)
+            {
+                Point3d tpt = new Point3d(plfl[i]);
+                foreach (Point3d ap in allPts)
+                {
+                    double dist = plfl[i].DistanceTo(ap);
+                    if (dist < tolerance)
+                    {
+                        tpt = ap;
+                    }
+
+                }
+
+                npl.Add(tpt);
+            }
+
+            return npl;
+        }
+
+
+        //clean the holes in the floor
+        public static Floor correctHolesInTheFloor(Floor floor)
+        {
+            //
+
+            var iholes = floor.boundaryInternal;
+            var mergedholes = Curve.CreateBooleanUnion(iholes, 0.0001);
+
+            Curve boundary = floor.boundaryExternal;
+            double t = 0.01;
+            List<Curve> curvesNotSubtract = new List<Curve>();
+            List<Curve> curvesToSubtract = new List<Curve>();
+
+            foreach (Curve mh in mergedholes)
+            {
+                Polyline hole = new Polyline();
+                mh.TryGetPolyline(out hole);
+                List<Point3d> pointsTouchingBoundary = new List<Point3d>();
+
+                foreach (Point3d ph in hole)
+                {
+                    if (boundary.Contains(ph, Plane.WorldXY, t) == PointContainment.Coincident)
+                    { 
+                        pointsTouchingBoundary.Add(ph);
+                    }    
+                }
+
+                if (pointsTouchingBoundary.Count > 1)
+                {
+                    curvesToSubtract.Add(mh);
+                }
+                else
+                {
+                    curvesNotSubtract.Add(mh);
+                }
+            
+            }
+
+
+            var substractHoles = Curve.CreateBooleanDifference(boundary, curvesToSubtract, 0.0001);
+
+            if (substractHoles.Length>0)
+            {
+                floor.boundaryExternal = Curve.CreateBooleanDifference(boundary, curvesToSubtract, 0.0001)[0];
+            }
+            else
+            {
+                floor.boundaryExternal = boundary;
+            }
+            
+            floor.boundaryInternal = curvesNotSubtract.ToArray();
+
+            floor.rebuildSurfaceBasedOnBoundaries(); 
+
+            //floor.boundaryInternal = null;
+
+            return floor;
+        }
+
         //end of allmethods
     }
 }

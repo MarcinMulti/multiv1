@@ -69,6 +69,7 @@
     <Compile Include="Classes\Wall.cs" />
     <Compile Include="Classes\Wall_Section.cs" />
     <Compile Include="Components\MC_CorrectModel_1.cs" />
+    <Compile Include="Components\MC_CorrectModel_2.cs" />
     <Compile Include="Components\MR_Column_Brep.cs" />
     <Compile Include="Components\MR_Floor_Brep.cs" />
     <Compile Include="Components\MR_Walls.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Components\MR_Wall_Brep.cs" />
     <Compile Include="deconstructors\DeconstructAssembly.cs" />
     <Compile Include="deconstructors\DeconstructWall.cs" />
+    <Compile Include="deconstructors\DeconstructFloor.cs" />
     <Compile Include="FEMDesign\MF_FEMDesignModel.cs" />
     <Compile Include="Methods\Geometry.cs" />
     <Compile Include="Methods\Plaxis.cs" />
