@@ -83,14 +83,22 @@ namespace Multiconsult_V001.Components
             NurbsCurve bottomAxisCurve = constructionLines[0].ToNurbsCurve();
             var projectToBottom = Transform.PlanarProjection(w.planeBottom);
             bottomAxisCurve.Transform(projectToBottom);
-            w.bottomAxis = bottomAxisCurve;
+
+            Point3d p1 = new Point3d(constructionLines[0].FromX, constructionLines[0].FromY, constructionLines[2].FromZ);
+            Point3d p2 = new Point3d(constructionLines[0].ToX, constructionLines[0].ToY, constructionLines[2].FromZ);
+            Point3d p3 = new Point3d(constructionLines[0].FromX, constructionLines[0].FromY, constructionLines[2].ToZ);
+            Point3d p4 = new Point3d(constructionLines[0].ToX, constructionLines[0].ToY, constructionLines[2].ToZ);
+
+            w.bottomAxis = new Line(p1, p2).ToNurbsCurve();
+            w.topAxis = new Line(p3, p4).ToNurbsCurve();
+
             Point3d wallOrigin = constructionLines[2].PointAt(0.5);
             Vector3d wallX = Point3d.Subtract(constructionLines[0].From, constructionLines[0].To);
             Vector3d wallY = Point3d.Subtract(constructionLines[2].From, constructionLines[2].To);
             w.plane = new Plane(wallOrigin, wallX, wallY);
 
             //assign section
-            w.section = new Wall_Section( "straight wall", Math.Round(constructionLines[0].Length));
+            w.section = new Wall_Section( "straight wall", Math.Round(constructionLines[1].Length));
             //assign material
             w.material = Methods.Revit.getRevitMaterialFromString(type);
 

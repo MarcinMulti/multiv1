@@ -39,6 +39,7 @@ namespace Multiconsult_V001.deconstructors
             pManager.AddLineParameter("LineColumns", "LC", "All column lines", GH_ParamAccess.list);
             pManager.AddBrepParameter("SurfaceWalls", "SW", "All surface walls", GH_ParamAccess.list);
             pManager.AddBrepParameter("SurfaceFloors", "SF", "All surface floors", GH_ParamAccess.list);
+            pManager.AddBrepParameter("BB", "BB", "Bounding box", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -73,6 +74,7 @@ namespace Multiconsult_V001.deconstructors
                 bs.Add(f.Value.brep);
                 fs.AddRange(f.Value.surface);
             }
+            model.calculateBB();
 
             DA.SetDataList(0, bs);
             DA.SetDataList(1, model.columns.Values);
@@ -81,6 +83,7 @@ namespace Multiconsult_V001.deconstructors
             DA.SetDataList(4, ls);
             DA.SetDataList(5, ws);
             DA.SetDataList(6, fs);
+            DA.SetData(7, model.bb.ToBrep());
         }
 
         /// <summary>

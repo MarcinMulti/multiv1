@@ -110,8 +110,12 @@ namespace Multiconsult_V001.Components
             List<int> wallsToRemove = new List<int>();
             foreach (var w in wals)
             {
-                Line ba = new Line(w.Value.bottomAxis.PointAtStart, w.Value.bottomAxis.PointAtEnd);
-                Line ta = new Line(w.Value.topAxis.PointAtStart, w.Value.topAxis.PointAtEnd);
+                Line ba = new Line(
+                    roundPoint(w.Value.bottomAxis.PointAtStart,digits),
+                    roundPoint(w.Value.bottomAxis.PointAtEnd,digits));
+                Line ta = new Line(
+                    roundPoint(w.Value.topAxis.PointAtStart, digits),
+                    roundPoint(w.Value.topAxis.PointAtEnd, digits));
 
                 Point3d p1 = new Point3d(ba.FromX, ba.FromY, ba.FromZ);
                 Point3d p2 = new Point3d(ba.ToX, ba.ToY, ba.ToZ);

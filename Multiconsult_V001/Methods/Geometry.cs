@@ -654,6 +654,8 @@ namespace Multiconsult_V001.Methods
         public static Floor adjustFloorToBottomWalls(Floor floor, Dictionary<int, Wall> walls, double tolerance)
         {
             Floor newFloor = new Floor();
+            newFloor.section = floor.section;
+            newFloor.material = floor.material;
             //z coordinate of the plane
             double zc = Math.Round(floor.plane.OriginZ,5);
 
@@ -726,6 +728,8 @@ namespace Multiconsult_V001.Methods
         public static Floor adjustFloorToTopWalls(Floor floor, Dictionary<int, Wall> walls, double tolerance)
         {
             Floor newFloor = new Floor();
+            newFloor.section = floor.section;
+            newFloor.material = floor.material;
             //z coordinate of the plane
             double zc = Math.Round(floor.plane.OriginZ, 5);
 
