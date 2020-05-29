@@ -12,9 +12,9 @@ namespace Multiconsult_V001.Revit
         /// Initializes a new instance of the MR_RevitModel class.
         /// </summary>
         public MR_RevitModel()
-          : base("MR_RevitModel", "Nickname",
-              "Description",
-              "Category", "Subcategory")
+          : base("DeconstructAssembly", "DA",
+              "Deconstruct assembly properties",
+              "Multiconsult", "Revit")
         {
         }
 

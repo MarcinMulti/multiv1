@@ -5,16 +5,17 @@ using Grasshopper.Kernel;
 using Multiconsult_V001.Classes;
 using Rhino.Geometry;
 
+
 namespace Multiconsult_V001.deconstructors
 {
-    public class DeconstructWall : GH_Component
+    public class DeconstructFloor : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the DeconstructWall class.
+        /// Initializes a new instance of the MyComponent1 class.
         /// </summary>
-        public DeconstructWall()
-          : base("DeconstructWall", "DW",
-              "Deconstruct the wall properties",
+        public DeconstructFloor()
+           : base("DeconstructFloor", "DF",
+              "Deconstruct the floor properties",
               "Multiconsult", "Deconstructors")
         {
         }
@@ -24,7 +25,7 @@ namespace Multiconsult_V001.deconstructors
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("MultiWall","MW","Multiconsult Wall object",GH_ParamAccess.item);
+            pManager.AddGenericParameter("MultiFloor", "MF", "Multiconsult Floor object", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -32,12 +33,12 @@ namespace Multiconsult_V001.deconstructors
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddBrepParameter("Surface", "Srf", "Master Surface", GH_ParamAccess.item); //0
-            pManager.AddCurveParameter("Axis", "A", "Master Surface axis on the bottom", GH_ParamAccess.item); //1
-            pManager.AddPlaneParameter("Plane", "Pl", "WallPlane", GH_ParamAccess.item); //2
-            pManager.AddPlaneParameter("BottomPlane", "BPl", "Master Surface bottom plane", GH_ParamAccess.item); //3
-            pManager.AddPlaneParameter("TopPlane", "TPl", "Master Surface top plane", GH_ParamAccess.item); //4
-            pManager.AddLineParameter("ConstrLines", "CLs", "Construction lines", GH_ParamAccess.list); //5
+            pManager.AddBrepParameter("Surface", "Srf", "Master Surface", GH_ParamAccess.list); //0
+            pManager.AddCurveParameter("ExternalCrv", "Ecrv", "External boundary curve", GH_ParamAccess.item); //1
+            pManager.AddCurveParameter("InternalCrv", "Icrv", "Intrnals curves", GH_ParamAccess.list); //2
+            pManager.AddPlaneParameter("Plan", "Pl", "Master plane of the floor", GH_ParamAccess.item); //3
+            pManager.AddBrepParameter("Brep", "B", "Brep representing floor", GH_ParamAccess.item); //4
+            //pManager.AddLineParameter("ConstrLines", "CLs", "Construction lines", GH_ParamAccess.list); //5
         }
 
         /// <summary>
@@ -46,15 +47,15 @@ namespace Multiconsult_V001.deconstructors
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            Wall w = new Wall();
-            DA.GetData(0, ref w);
+            Floor f = new Floor();
+            DA.GetData(0, ref f);
 
-            DA.SetData(0, w.surface); //0
-            DA.SetData(1, w.bottomAxis); //1
-            DA.SetData(2, w.plane); //2
-            DA.SetData(3, w.planeBottom); //3
-            DA.SetData(4, w.planeTop); //4
-            DA.SetDataList(5, w.constructionLines.ToList()); //5
+            DA.SetDataList(0, f.surface); //0
+            DA.SetData(1, f.boundaryExternal); //1
+            DA.SetDataList(2, f.boundaryInternal); //2
+            DA.SetData(3, f.plane); //3
+            DA.SetData(4, f.brep); //4
+            //DA.SetDataList(5, f.); //5
         }
 
         /// <summary>
@@ -69,13 +70,12 @@ namespace Multiconsult_V001.deconstructors
                 return null;
             }
         }
-
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("ca5dab7c-3bd4-4571-96d9-05f0faa2743f"); }
+            get { return new Guid("0a39b8ce-a4a0-464f-8c9b-fcb6117a1125"); }
         }
     }
 }

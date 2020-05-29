@@ -36,5 +36,15 @@ namespace Multiconsult_V001.Classes
             id = _id;
             surface = _surface;
         }
+
+
+        //Methods
+        public void rebuildSurfaceBasedOnBoundaries()
+        {
+            List<Curve> crvs = new List<Curve>();
+            crvs.Add(boundaryExternal);
+            crvs.AddRange(boundaryInternal);
+            surface = Brep.CreatePlanarBreps(crvs, 0.00001);
+        }
     }
 }

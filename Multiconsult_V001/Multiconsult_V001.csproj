@@ -57,6 +57,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Assembly.cs" />
+    <Compile Include="Classes\Beam.cs" />
+    <Compile Include="Classes\Beam_Section.cs" />
     <Compile Include="Classes\Column.cs" />
     <Compile Include="Classes\Column_Section.cs" />
     <Compile Include="Classes\Floor.cs" />
@@ -68,7 +70,10 @@
     <Compile Include="Classes\Material.cs" />
     <Compile Include="Classes\Wall.cs" />
     <Compile Include="Classes\Wall_Section.cs" />
+    <Compile Include="Components\MR_Beam.cs" />
     <Compile Include="Components\MC_CorrectModel_1.cs" />
+    <Compile Include="Components\MC_CorrectModel_2.cs" />
+    <Compile Include="Components\MR_Beam_Brep.cs" />
     <Compile Include="Components\MR_Column_Brep.cs" />
     <Compile Include="Components\MR_Floor_Brep.cs" />
     <Compile Include="Components\MR_Walls.cs" />
@@ -79,6 +84,7 @@
     <Compile Include="Components\MR_Wall_Brep.cs" />
     <Compile Include="deconstructors\DeconstructAssembly.cs" />
     <Compile Include="deconstructors\DeconstructWall.cs" />
+    <Compile Include="deconstructors\DeconstructFloor.cs" />
     <Compile Include="FEMDesign\MF_FEMDesignModel.cs" />
     <Compile Include="Methods\Geometry.cs" />
     <Compile Include="Methods\Plaxis.cs" />
@@ -88,7 +94,39 @@
     <Compile Include="Multiconsult_V001Info.cs" />
     <Compile Include="Plaxis\MP_PlaxisModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Revit\MR_RevitModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\iconB.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\iconC.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\iconF.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\iconG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\iconP.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\iconR.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\iconW.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

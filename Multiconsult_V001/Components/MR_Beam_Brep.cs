@@ -4,25 +4,25 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
-namespace Multiconsult_V001.Plaxis
+namespace Multiconsult_V001.Components
 {
-    public class MP_PlaxisModel : GH_Component
+    public class MR_Beam_Brep : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the MP_PlaxisModel class.
+        /// Initializes a new instance of the MR_Beam_Brep class.
         /// </summary>
-        public MP_PlaxisModel()
-          : base("DeconstructAssembly", "DA",
-              "Deconstruct assembly properties",
-              "Multiconsult", "Plaxis")
-        {        }
+        public MR_Beam_Brep()
+          : base("MR_Beam_Brep", "Nickname",
+              "Description",
+              "Multiconsult", "Revit")
+        {
+        }
 
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("MultiAssembly", "MA", "Multiconsult assembly", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -30,8 +30,6 @@ namespace Multiconsult_V001.Plaxis
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            
-           pManager.AddGenericParameter("PlaxisModel", "MA", "Multiconsult assembly", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -40,9 +38,6 @@ namespace Multiconsult_V001.Plaxis
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-
-
-
         }
 
         /// <summary>
@@ -63,7 +58,7 @@ namespace Multiconsult_V001.Plaxis
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("bc7e2b0c-96aa-4a87-b1bf-23cef2a835e1"); }
+            get { return new Guid("5e95da44-efbb-454a-9d4c-cd4b2ff2263b"); }
         }
     }
 }
