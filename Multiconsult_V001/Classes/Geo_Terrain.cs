@@ -12,7 +12,7 @@ namespace Multiconsult_V001.Classes
         public List<Point3d> points;
         public string name;
         public Surface surface;
-
+        public Mesh mesh;
         public Geo_Terrain()
         { 
             //empty constructor
@@ -22,5 +22,7 @@ namespace Multiconsult_V001.Classes
         {
             points = _pts;
         }
+
+
     }
 }

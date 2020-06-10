@@ -18,11 +18,15 @@ namespace Multiconsult_V001.Classes
         public Brep brep;
 
         //Added Multiclasses
-        public Column_Section section;
+        public Bar_Section section;
         public Material material;
 
         //constructors
-        public Column(Line _line)
+        public Column()
+        {
+        }
+
+            public Column(Line _line)
         {
             line = _line;
             pt_st = line.From;

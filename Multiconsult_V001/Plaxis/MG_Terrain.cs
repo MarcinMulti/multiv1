@@ -17,7 +17,7 @@ namespace Multiconsult_V001.Components
         public MG_Terrain()
           : base("ReadTerrain", "RT",
               "Creare Terrain from string list",
-              "Multiconsult", "Geotechnic")
+              "Multiconsult", "Plaxis")
         {
         }
 

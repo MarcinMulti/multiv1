@@ -18,7 +18,7 @@ namespace Multiconsult_V001.Classes
         public Brep brep;
 
         //Added Multiclasses
-        public Beam_Section section;
+        public Bar_Section section;
         public Material material;
 
         //constructors

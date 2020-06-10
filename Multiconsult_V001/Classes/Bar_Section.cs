@@ -7,7 +7,7 @@ using Rhino.Geometry;
 
 namespace Multiconsult_V001.Classes
 {
-    class Beam_Section
+    class Bar_Section
     {
         //properties
         public string name;
@@ -24,18 +24,18 @@ namespace Multiconsult_V001.Classes
         public string material;
 
         //constructors
-        public Beam_Section()
+        public Bar_Section()
         {
             //empty constructor
         }
 
-        public Beam_Section(string _name)
+        public Bar_Section(string _name)
         {
             name = _name;
 
         }
 
-        public Beam_Section(int _id, string _name)
+        public Bar_Section(int _id, string _name)
         {
             id = _id;
             name = _name;

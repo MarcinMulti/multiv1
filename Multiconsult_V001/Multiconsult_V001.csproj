@@ -58,14 +58,15 @@
   <ItemGroup>
     <Compile Include="Classes\Assembly.cs" />
     <Compile Include="Classes\Beam.cs" />
-    <Compile Include="Classes\Beam_Section.cs" />
+    <Compile Include="Classes\Bar_Section.cs" />
     <Compile Include="Classes\Column.cs" />
-    <Compile Include="Classes\Column_Section.cs" />
     <Compile Include="Classes\Floor.cs" />
     <Compile Include="Classes\Floor_Section.cs" />
     <Compile Include="Classes\Geo_Borehole.cs" />
     <Compile Include="Classes\Geo_Layer.cs" />
     <Compile Include="Classes\Geo_Node.cs" />
+    <Compile Include="Classes\Geo_Soil.cs" />
+    <Compile Include="Classes\Geo_Surface.cs" />
     <Compile Include="Classes\Geo_Terrain.cs" />
     <Compile Include="Classes\Material.cs" />
     <Compile Include="Classes\Wall.cs" />
@@ -79,10 +80,12 @@
     <Compile Include="Components\MR_Walls.cs" />
     <Compile Include="Components\MR_Floors.cs" />
     <Compile Include="Components\MC_Assembler.cs" />
-    <Compile Include="Components\MG_Soil.cs" />
-    <Compile Include="Components\MG_Terrain.cs" />
+    <Compile Include="Plaxis\MG_Soil.cs" />
+    <Compile Include="Plaxis\MG_Terrain.cs" />
     <Compile Include="Components\MR_Wall_Brep.cs" />
     <Compile Include="deconstructors\DeconstructAssembly.cs" />
+    <Compile Include="deconstructors\DeconstructColumn.cs" />
+    <Compile Include="deconstructors\DeconstructSectionBar.cs" />
     <Compile Include="deconstructors\DeconstructWall.cs" />
     <Compile Include="deconstructors\DeconstructFloor.cs" />
     <Compile Include="FEMDesign\MF_FEMDesignModel.cs" />
@@ -92,6 +95,13 @@
     <Compile Include="Components\MR_Columns.cs" />
     <Compile Include="Methods\Revit.cs" />
     <Compile Include="Multiconsult_V001Info.cs" />
+    <Compile Include="Plaxis\MP_BuildLayers.cs" />
+    <Compile Include="Plaxis\DeconstructGeoBorehole.cs" />
+    <Compile Include="Plaxis\DeconstructGeoLayer.cs" />
+    <Compile Include="Plaxis\DeconstructGeoNode.cs" />
+    <Compile Include="Plaxis\DeconstructGeoSurface.cs" />
+    <Compile Include="Plaxis\MP_BuildSoil.cs" />
+    <Compile Include="Plaxis\GetSurfaceData.cs" />
     <Compile Include="Plaxis\MP_PlaxisModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

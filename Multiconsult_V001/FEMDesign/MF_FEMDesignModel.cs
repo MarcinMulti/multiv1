@@ -7,6 +7,7 @@ using Multiconsult_V001.Properties;
 using Rhino.Geometry;
 using Rhino.Geometry.Intersect;
 
+
 namespace Multiconsult_V001.FEMDesign
 {
     public class MF_FEMDesignModel : GH_Component
@@ -93,22 +94,54 @@ namespace Multiconsult_V001.FEMDesign
                 targetPlan.Y - sourcePlan.Y, 
                 targetPlan.Z - sourcePlan.Z);
 
-            Transform tscale = Transform.Scale(sourcePlan, scalef);
-            Transform tmove = Transform.Translation(moveVec);
-            Transform comp = tmove*tscale;
+            Rhino.Geometry.Transform tscale = Rhino.Geometry.Transform.Scale(sourcePlan, scalef);
+            Rhino.Geometry.Transform tmove = Rhino.Geometry.Transform.Translation(moveVec);
+            Rhino.Geometry.Transform comp = tmove*tscale;
 
             //methods
             foreach (var c in model.columns)
             {
-                Line columnLine = c.Value.line;
+                Rhino.Geometry.Line columnLine = c.Value.line;
                 NurbsCurve columnCurve = columnLine.ToNurbsCurve();
                 
                 columnCurve.Transform(tmove);
                 columnCurve.Scale(scalef);
 
                 columnAxes.Add(columnCurve);
+
+
                 columnMaterials.Add(c.Value.material.name);
-                columnSections.Add(c.Value.section.name);
+
+                //create FEM design section name
+                string FEMDesignName = "Steel sections";
+
+                if (c.Value.material.name[0] == 'B')
+                    FEMDesignName = "Concrete sections";
+                else if(c.Value.material.name[0] == 'C')
+                    FEMDesignName = "Timber sections";
+
+                if (c.Value.section.type ==0)
+                { 
+                    FEMDesignName = FEMDesignName + ", Circle";
+                    FEMDesignName = FEMDesignName + ", D " +c.Value.section.dim1;
+                }
+
+                if (c.Value.section.type == 1)
+                { 
+                    FEMDesignName = FEMDesignName + ", Square";
+                    FEMDesignName = FEMDesignName + ", " + c.Value.section.dim1;
+                }
+
+                if (c.Value.section.type == 2)
+                { 
+                    FEMDesignName = FEMDesignName + ", Rectangle";
+                    FEMDesignName = FEMDesignName + ", " + c.Value.section.dim1 + "x" + c.Value.section.dim2;
+                }
+
+
+
+
+                columnSections.Add(FEMDesignName);
             }
 
             foreach (var w in model.walls)

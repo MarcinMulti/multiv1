@@ -59,12 +59,12 @@ namespace Multiconsult_V001.Methods
         }
 
 
-        public static Column_Section findColumnSection(Brep brep)
+        public static Bar_Section findColumnSection(Brep brep)
         {
             //variables
             var ids = Methods.Geometry.findBottomAndTopBrepFace(brep);
             var idcrvs = brep.Faces[ids[0]].AdjacentEdges();
-            Column_Section cs1 = new Column_Section();
+            Bar_Section cs1 = new Bar_Section();
             List<Curve> sectionCrvs = new List<Curve>();
             double d1 = 0;
             double d2 = 0;
